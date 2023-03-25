@@ -15,7 +15,7 @@ const Card = ({ user }) => {
   return (
     <div className="card">
       <p className="category">{CATEGORIES[user.deck.at(-1).category]}</p>
-      <img className="symbol" src={SYMBOLS[user.deck.at(-1).symbol]} />
+      <img alt="" className="symbol" src={SYMBOLS[user.deck.at(-1).symbol]} />
     </div>
   );
 };

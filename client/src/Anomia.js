@@ -2,7 +2,6 @@ import "./Anomia.css";
 import Square from "./Square";
 import { useState, useEffect } from "react";
 import Scoreboard from "./Scoreboard";
-import Card from "./Card.js";
 import flipcard from "./assets/audio/flipcard.mp3";
 import correct from "./assets/audio/correct.wav";
 import incorrect from "./assets/audio/incorrect.wav";
@@ -19,8 +18,6 @@ const Anomia = ({ socket, username, room, users, setShowLobby, setShowGame }) =>
   const POKEMON_DB = "https://pokeapi.co/api/v2/pokemon/?limit=9999";
   const SONGS_DB = "https://deezerdevs-deezer.p.rapidapi.com/search?q=";
   const CARS_DB = "https://car-api2.p.rapidapi.com/api/makes?sort=name&make=";
-
-  const FACEOFFSOUNDS = [faceoffsound1, faceoffsound2, faceoffsound3, faceoffsound4];
 
   const [state, setState] = useState({
     square: [],
@@ -40,28 +37,7 @@ const Anomia = ({ socket, username, room, users, setShowLobby, setShowGame }) =>
   const [currentFaceoffInput, setCurrentFaceoffInput] = useState("");
   const [disableInput, setDisableInput] = useState(false);
   const [showEndScreen, setShowEndScreen] = useState(false);
-
-  let num = users.length; //Number of Square to be generate
-  const buildCircle = () => {
-    const type = 1;
-    let radius = "160"; //distance from center
-    let start = -90; //shift start from 0
-    let slice = (360 * type) / num;
-
-    let items = [];
-    let i;
-    for (i = 0; i < num; i++) {
-      let rotate = slice * i + start;
-      let rotateReverse = rotate * -1;
-
-      items.push({
-        radius: radius,
-        rotate: rotate,
-        rotateReverse: rotateReverse,
-      });
-    }
-    setState({ square: items });
-  };
+  const [num, setNum] = useState(users.length); //Number of Square to be generate
 
   function playFlipCardSound() {
     let audio = new Audio(flipcard);
@@ -80,11 +56,6 @@ const Anomia = ({ socket, username, room, users, setShowLobby, setShowGame }) =>
   }
   function playUsedWordSound() {
     let audio = new Audio(usedword);
-    audio.volume = 0.3;
-    audio.play();
-  }
-  function playFaceoffSound() {
-    let audio = new Audio(FACEOFFSOUNDS[Math.floor(Math.random() * 4)]);
     audio.volume = 0.3;
     audio.play();
   }
@@ -199,23 +170,46 @@ const Anomia = ({ socket, username, room, users, setShowLobby, setShowGame }) =>
     setCurrentFaceoffInput("");
   };
 
-  const endGame = async () => {
-    setShowEndScreen(true);
-    const endGameData = { room: room };
-    await socket.emit("end_game", endGameData);
-  };
-
   useEffect(() => {
+    const buildCircle = () => {
+      const type = 1;
+      let radius = "160"; //distance from center
+      let start = -90; //shift start from 0
+      let slice = (360 * type) / num;
+
+      let items = [];
+      let i;
+      for (i = 0; i < num; i++) {
+        let rotate = slice * i + start;
+        let rotateReverse = rotate * -1;
+
+        items.push({
+          radius: radius,
+          rotate: rotate,
+          rotateReverse: rotateReverse,
+        });
+      }
+      setState({ square: items });
+    };
+
+    const endGame = async () => {
+      setShowEndScreen(true);
+      const endGameData = { room: room };
+      await socket.emit("end_game", endGameData);
+    };
+
+    function playFaceoffSound() {
+      const FACEOFFSOUNDS = [faceoffsound1, faceoffsound2, faceoffsound3, faceoffsound4];
+      let audio = new Audio(FACEOFFSOUNDS[Math.floor(Math.random() * 4)]);
+      audio.volume = 0.3;
+      audio.play();
+    }
+
     setPlayers(users);
     buildCircle();
-  }, []);
-
-  useEffect(() => {
     socket.on("update_room", (data) => {
-      num = data.users.length;
+      setNum(data.users.length);
       buildCircle();
-      setPlayers(data.users);
-      // buildCircle();
     });
     socket.on("started_game", (data) => {
       setShowEndScreen(false);
@@ -243,7 +237,7 @@ const Anomia = ({ socket, username, room, users, setShowLobby, setShowGame }) =>
     socket.on("finish_validation", () => {
       setDisableInput(false);
     });
-  }, [socket]);
+  }, [socket, num, room, users]);
 
   return (
     <div className="game-window">

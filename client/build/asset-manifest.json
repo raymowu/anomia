@@ -1,0 +1,25 @@
+{
+  "files": {
+    "main.css": "/static/css/main.83b39445.css",
+    "main.js": "/static/js/main.c2c694bf.js",
+    "static/js/496.b1a37ed9.chunk.js": "/static/js/496.b1a37ed9.chunk.js",
+    "static/media/startgamesound.wav": "/static/media/startgamesound.952b0801786b04a70a01.wav",
+    "static/media/incorrect.wav": "/static/media/incorrect.cab1c2b66980956b01e5.wav",
+    "static/media/correct.wav": "/static/media/correct.3e2b8a36c21e21afa1a5.wav",
+    "static/media/usedword.mp3": "/static/media/usedword.fec64ff87eb601be4888.mp3",
+    "static/media/chatsound.wav": "/static/media/chatsound.03ee3acc87b2c1bf83e9.wav",
+    "static/media/faceoffsound1.mp3": "/static/media/faceoffsound1.b5678177dbc3427c51f6.mp3",
+    "static/media/flipcard.mp3": "/static/media/flipcard.482865a614fed3add746.mp3",
+    "static/media/faceoffsound2.mp3": "/static/media/faceoffsound2.b1b7708b2795e4e59636.mp3",
+    "static/media/faceoffsound4.mp3": "/static/media/faceoffsound4.0b3573217820ac2ceb32.mp3",
+    "static/media/faceoffsound3.mp3": "/static/media/faceoffsound3.a0db3f769e4c9df477fc.mp3",
+    "index.html": "/index.html",
+    "main.83b39445.css.map": "/static/css/main.83b39445.css.map",
+    "main.c2c694bf.js.map": "/static/js/main.c2c694bf.js.map",
+    "496.b1a37ed9.chunk.js.map": "/static/js/496.b1a37ed9.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.83b39445.css",
+    "static/js/main.c2c694bf.js"
+  ]
+}

@@ -9,16 +9,14 @@ const Scoreboard = ({ users }) => {
       <div className="scoreboard-body">
         <table style={{ width: "100%" }}>
           <tbody>
-            {users
-              .sort((a, b) => b.points - a.points)
-              .map((p) => {
-                return (
-                  <tr key={p.id}>
-                    <td className="scoreboard-username">{p.username}</td>
-                    <td className="scoreboard-points">{p.points}</td>
-                  </tr>
-                );
-              })}
+            {users.map((p) => {
+              return (
+                <tr key={p.id}>
+                  <td className="scoreboard-username">{p.username}</td>
+                  <td className="scoreboard-points">{p.points}</td>
+                </tr>
+              );
+            })}
           </tbody>
         </table>
       </div>

@@ -7,7 +7,7 @@ function Home() {
   let navigate = useNavigate();
 
   const joinRoom = () => {
-    if (/[~`!#$%\^&*+=\-\[\]\\';,/{}|\\":<>\?]/g.test(room)) {
+    if (/[~`!#$%^&*+=\-[\]\\';,/{}|\\":<>?]/g.test(room)) {
       alert("No special characters allowed (!, $, /, etc.)");
       return false;
     }

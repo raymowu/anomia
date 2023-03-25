@@ -11,7 +11,6 @@ function Game({ socket, username, room, setShowLobby }) {
   const [currentMessage, setCurrentMessage] = useState("");
   const [messageList, setMessageList] = useState([]);
   const [users, setUsers] = useState([]);
-  const [showChat, setShowChat] = useState(true);
   const [showGame, setShowGame] = useState(false);
 
   let navigate = useNavigate();
@@ -117,7 +116,7 @@ function Game({ socket, username, room, setShowLobby }) {
                 clockwise order, until the symbols on two players' cards match. If you
                 draw a card and there is no match, the next player draws.
               </p>
-              <h2>Face-offs & WInning Piles</h2>
+              <h2>Face-offs & Winning Piles</h2>
               <p>
                 When the symbols on two players' cards match, they must Face-Off with one
                 another. This is the heart of the game. A Face-Off consists of giving a
@@ -154,51 +153,48 @@ function Game({ socket, username, room, setShowLobby }) {
           setShowGame={setShowGame}
         />
       )}
-      {showChat ? (
-        <div className="chat-window">
-          <div className="chat-header">
-            <p>Live Chat</p>
-          </div>
-          <div className="chat-body">
-            <ScrollToBottom className="message-container">
-              {messageList.map((messageContent, index) => {
-                return (
-                  <div className="message" key={room + index}>
-                    <div>
-                      <div className="message-content">
-                        <p
-                          className={
-                            messageContent.author.length === 0 ? "admin-message" : ""
-                          }
-                        >
-                          <span className="message-meta">{messageContent.author}</span>{" "}
-                          {messageContent.message}
-                        </p>
-                      </div>
+      <div className="chat-window">
+        <div className="chat-header">
+          <p>Live Chat</p>
+        </div>
+        <div className="chat-body">
+          <ScrollToBottom className="message-container">
+            {messageList.map((messageContent, index) => {
+              return (
+                <div className="message" key={room + index}>
+                  <div>
+                    <div className="message-content">
+                      <p
+                        className={
+                          messageContent.author.length === 0 ? "admin-message" : ""
+                        }
+                      >
+                        <span className="message-meta">{messageContent.author}</span>{" "}
+                        {messageContent.message}
+                      </p>
                     </div>
                   </div>
-                );
-              })}
-            </ScrollToBottom>
-          </div>
-          <div className="chat-footer">
-            <input
-              type="text"
-              value={currentMessage}
-              placeholder="Hey..."
-              onChange={(event) => {
-                setCurrentMessage(event.target.value);
-              }}
-              onKeyDown={(event) => {
-                event.key === "Enter" && sendMessage();
-              }}
-            />
-            <button onClick={sendMessage}>&#9658;</button>
-          </div>
+                </div>
+              );
+            })}
+          </ScrollToBottom>
         </div>
-      ) : (
-        <></>
-      )}
+        <div className="chat-footer">
+          <input
+            type="text"
+            value={currentMessage}
+            placeholder="Hey..."
+            onChange={(event) => {
+              setCurrentMessage(event.target.value);
+            }}
+            onKeyDown={(event) => {
+              event.key === "Enter" && sendMessage();
+            }}
+          />
+          <button onClick={sendMessage}>&#9658;</button>
+        </div>
+      </div>
+      }
     </div>
   );
 }

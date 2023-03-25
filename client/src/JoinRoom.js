@@ -14,14 +14,14 @@ function JoinRoom() {
   const roomId = useParams();
   useEffect(() => {
     setRoom(roomId.roomid);
-  }, []);
+  }, [roomId]);
 
   const joinRoom = () => {
     if (username.length > 12) {
       alert("Display name is too long");
       return false;
     }
-    if (/[~`!#$%\^&*+=\-\[\]\\';,/{}|\\":<>\?]/g.test(username)) {
+    if (/[~`!#$%^&*+=\-[\]\\';,/{}|\\":<>?]/g.test(username)) {
       alert("No special characters allowed (!, $, /, etc.)");
       return false;
     }

@@ -1,0 +1,32 @@
+.endscreen {
+  margin: 120px 0px 0px 300px;
+  padding: 20px;
+  position: absolute;
+  width: 600px;
+  height: 300px;
+  border: 2px solid black;
+  border-radius: 10px;
+  background-color: white;
+  opacity: 0.96;
+  z-index: 9;
+}
+
+.endscreen p {
+  margin-top: 60px;
+  margin-bottom: 50px;
+  font-weight: bold;
+  font-size: 30px;
+}
+
+.endscreen-button {
+  background-color: rgb(255, 255, 255);
+  border-radius: 3px;
+  opacity: 1;
+  width: 160px;
+  height: 40px;
+  margin: 0px 40px;
+}
+
+.endscreen-button:hover {
+  background-color: rgb(232, 234, 245);
+}

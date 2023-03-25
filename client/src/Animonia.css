@@ -1,0 +1,55 @@
+.App {
+  font-family: "Gadugi", "sans-serif", "Arial";
+  text-align: center;
+  width: 100%;
+}
+
+.circle {
+  background: #da8d2a;
+  border: 10px solid #94421c;
+  width: 480px;
+  height: 480px;
+  border-radius: 50%;
+  margin: -500px 0px 40px 400px;
+  position: relative;
+  /* top: 200px; left: 200px; for example purposes only */
+}
+
+.circle-hold {
+  margin-left: 90px;
+  margin-top: 20px;
+  position: absolute;
+  left: 90px; /* calculate circle width / 2 - .square width / 2 */
+  top: 140px; /* calculate circle height / 2 - .square height / 2 */
+  /* transform: translate(-40%, -50%); */
+}
+
+.square {
+  position: absolute;
+  /* background: red; */
+  -webkit-transition: all 2s linear;
+  -moz-transition: all 2s linear;
+  transition: transform 2s linear;
+  width: 120px;
+  height: 20px;
+  text-align: center;
+  /* border-radius: 50%; */
+  color: white;
+  left: 0;
+}
+
+.faceoff-input {
+  width: 400px;
+  height: 40px;
+  margin-left: 240px;
+  padding: 12px 20px;
+  display: inline-block;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+  font-size: 20px;
+}
+
+.faceoff-input:focus {
+  outline-width: 0;
+}

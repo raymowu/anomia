@@ -12,9 +12,7 @@ const server = http.createServer(app);
 
 const io = require("socket.io")({
   cors: {
-    origin: "https://enigmatic-spire-43575.herokuapp.com/",
-    methods: ["GET", "POST"],
-    credentials: true,
+    origin: "*",
   },
 });
 

@@ -3,8 +3,8 @@ import io from "socket.io-client";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import Game from "./Game";
-// const socket = io.connect("https://enigmatic-spire-43575.herokuapp.com/");
-const socket = io.connect("http://localhost:3001");
+const socket = io.connect("https://enigmatic-spire-43575.herokuapp.com/");
+// const socket = io.connect("http://localhost:3001");
 
 function JoinRoom() {
   const [room, setRoom] = useState("");

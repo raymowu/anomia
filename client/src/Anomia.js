@@ -21,7 +21,7 @@ const Anomia = ({ socket, username, room, users, setShowLobby, setShowGame }) =>
   const COUNTRIES_DB = "https://restcountries.com/v3.1/all?fields=name,flags"; // FREE TO PUBLIC
   const BOOKS_DB = "https://www.googleapis.com/books/v1/volumes?q="; // FREE TO PUBLIC
   const LEAGUE_DB =
-    "http://ddragon.leagueoflegends.com/cdn/13.6.1/data/en_US/champion.json"; // FREE TO PUBLIC
+    "https://ddragon.leagueoflegends.com/cdn/13.6.1/data/en_US/champion.json"; // FREE TO PUBLIC
 
   const VIDEOGAMES_DB =
     "https://api.rawg.io/api/games?key=f2f0e308394b42c887a93d0c0276f6c2&search="; // 20,000 per month, need key
@@ -46,24 +46,32 @@ const Anomia = ({ socket, username, room, users, setShowLobby, setShowGame }) =>
   const [showEndScreen, setShowEndScreen] = useState(false);
   const [num, setNum] = useState(users.length); //Number of Square to be generate
 
-  function playFlipCardSound() {
-    let audio = new Audio(flipcard);
-    audio.volume = 0.3;
-    audio.play();
-  }
-  function playCorrectSound() {
-    let audio = new Audio(correct);
-    audio.volume = 0.3;
-    audio.play();
-  }
   function playIncorrectSound() {
     let audio = new Audio(incorrect);
-    audio.volume = 0.3;
+    audio.volume = 0.15;
     audio.play();
   }
   function playUsedWordSound() {
     let audio = new Audio(usedword);
-    audio.volume = 0.3;
+    audio.volume = 0.15;
+    audio.play();
+  }
+
+  function playFaceoffSound() {
+    const FACEOFFSOUNDS = [faceoffsound1, faceoffsound2, faceoffsound3, faceoffsound4];
+    let audio = new Audio(FACEOFFSOUNDS[Math.floor(Math.random() * 4)]);
+    audio.volume = 0.15;
+    audio.play();
+  }
+
+  function playFlipCardSound() {
+    let audio = new Audio(flipcard);
+    audio.volume = 0.15;
+    audio.play();
+  }
+  function playCorrectSound() {
+    let audio = new Audio(correct);
+    audio.volume = 0.15;
     audio.play();
   }
 
@@ -296,13 +304,6 @@ const Anomia = ({ socket, username, room, users, setShowLobby, setShowGame }) =>
       await socket.emit("end_game", endGameData);
     };
 
-    function playFaceoffSound() {
-      const FACEOFFSOUNDS = [faceoffsound1, faceoffsound2, faceoffsound3, faceoffsound4];
-      let audio = new Audio(FACEOFFSOUNDS[Math.floor(Math.random() * 4)]);
-      audio.volume = 0.3;
-      audio.play();
-    }
-
     setPlayers(users);
     buildCircle();
     socket.on("update_room", (data) => {
@@ -352,8 +353,10 @@ const Anomia = ({ socket, username, room, users, setShowLobby, setShowGame }) =>
       ) : (
         <></>
       )}
+
       <>
         <Scoreboard users={players} />
+
         <div className="circle">
           <div className="circle-hold">
             {state.square.map(function (value, index) {
@@ -371,6 +374,7 @@ const Anomia = ({ socket, username, room, users, setShowLobby, setShowGame }) =>
         </div>
         {roomState.faceoffPeople.includes(username) && !showEndScreen ? (
           <input
+            ref={(input) => input && input.focus()}
             className="faceoff-input"
             value={currentFaceoffInput}
             type="text"

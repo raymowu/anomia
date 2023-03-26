@@ -53,13 +53,13 @@ function Game({ socket, username, room, setShowLobby }) {
 
   function playChatSound() {
     let audio = new Audio(chatsound);
-    audio.volume = 0.3;
+    audio.volume = 0.1;
     audio.play();
   }
 
   function playStartGameSound() {
     let audio = new Audio(startgamesound);
-    audio.volume = 0.3;
+    audio.volume = 0.1;
     audio.play();
   }
 
@@ -96,6 +96,7 @@ function Game({ socket, username, room, setShowLobby }) {
               <p>
                 Invite your friends!{" "}
                 <input
+                  readOnly
                   className="copy-lobby-link"
                   type="text"
                   onMouseOver={handleMouseOver}

@@ -9,7 +9,7 @@ app.use(cors());
 
 const io = new Server(server, {
   cors: {
-    origin: "https://enigmatic-spire-43575.herokuapp.com",
+    origin: true,
     methods: ["GET", "POST"],
   },
 });

@@ -193,74 +193,73 @@ io.on("connection", (socket) => {
 
   socket.on("faceoff-input", (data) => {
     if (data.validInput === true) {
-      gameState[getRoomIndex(data.room)].faceoff = false;
-      if (!gameState[getRoomIndex(data.room)].faceoff) {
-        io.to(data.room).emit("receive_message", {
-          room: data.room,
-          author: "",
-          message: `${data.username} won the faceoff with the word: ${data.input}`,
-        });
-        // proceed game when theres a winner
-        gameState[getRoomIndex(data.room)].usedWords.push(data.input.toLowerCase());
-        getUser(data.id).points++;
-        // TODO make more efficient by storing id in faceoffPeople and accessing users from there
-        for (let i = 0; i < gameState[getRoomIndex(data.room)].numPlayers; i++) {
-          let user1 = getUsersInRoom(data.room)[i];
-          if (
-            user1.username === gameState[getRoomIndex(data.room)].faceoffPeople[0] ||
-            user1.username === gameState[getRoomIndex(data.room)].faceoffPeople[1]
-          ) {
-            if (user1.username !== data.username) {
-              user1.deck.splice(-1);
-            }
-            user1.inFaceoff = false;
+      io.to(data.room).emit("receive_message", {
+        room: data.room,
+        author: "",
+        message: `${data.username} won the faceoff with the word: ${data.input}`,
+      });
+      // proceed game when theres a winner
+      gameState[getRoomIndex(data.room)].usedWords.push(data.input.toLowerCase());
+      getUser(data.id).points++;
+      // TODO make more efficient by storing id in faceoffPeople and accessing users from there
+      for (let i = 0; i < gameState[getRoomIndex(data.room)].numPlayers; i++) {
+        let user1 = getUsersInRoom(data.room)[i];
+        if (
+          user1.username === gameState[getRoomIndex(data.room)].faceoffPeople[0] ||
+          user1.username === gameState[getRoomIndex(data.room)].faceoffPeople[1]
+        ) {
+          if (user1.username !== data.username) {
+            user1.deck.splice(-1);
           }
+          user1.inFaceoff = false;
         }
-        gameState[getRoomIndex(data.room)].faceoffPeople = [];
-
-        // check for chain face offs and set statuses accordingly
-        let canContinue = true;
-        for (let i = 0; i < gameState[getRoomIndex(data.room)].numPlayers; i++) {
-          for (let j = i + 1; j < gameState[getRoomIndex(data.room)].numPlayers; j++) {
-            let user1 = getUsersInRoom(data.room)[i];
-            let user2 = getUsersInRoom(data.room)[j];
-            if (
-              user1.deck.length !== 0 &&
-              user2.deck.length !== 0 &&
-              user1.deck.at(-1).symbol === user2.deck.at(-1).symbol
-            ) {
-              canContinue = false;
-              gameState[getRoomIndex(data.room)].faceoffPeople = [
-                user1.username,
-                user2.username,
-              ];
-              gameState[getRoomIndex(data.room)].faceoff = true;
-              user1.inFaceoff = true;
-              user2.inFaceoff = true;
-              break;
-            }
-            users;
-          }
-        }
-        io.to(data.room).emit("post_faceoff", {
-          users: getUsersInRoom(data.room),
-          roomState: gameState[getRoomIndex(data.room)],
-        });
-        //prevent drawing card for next turn during a chain faceoff
-        if (canContinue) {
-          setTimeout(() => {
-            nextTurn(data.room);
-          }, MAX_WAITING);
-        }
-      } else {
-        io.to(data.room).emit("receive_message", {
-          room: data.room,
-          author: "",
-          message: `${data.username} yelled, "${data.input}!"`,
-        });
       }
-      io.to(data.id).emit("finish_validation");
+      gameState[getRoomIndex(data.room)].faceoffPeople = [];
+      gameState[getRoomIndex(data.room)].faceoff = false;
+
+      // check for chain face offs and set statuses accordingly
+      let canContinue = true;
+      for (let i = 0; i < gameState[getRoomIndex(data.room)].numPlayers; i++) {
+        for (let j = i + 1; j < gameState[getRoomIndex(data.room)].numPlayers; j++) {
+          let user1 = getUsersInRoom(data.room)[i];
+          let user2 = getUsersInRoom(data.room)[j];
+          if (
+            user1.deck.length !== 0 &&
+            user2.deck.length !== 0 &&
+            user1.deck.at(-1).symbol === user2.deck.at(-1).symbol
+          ) {
+            canContinue = false;
+            gameState[getRoomIndex(data.room)].faceoffPeople = [
+              user1.username,
+              user2.username,
+            ];
+            gameState[getRoomIndex(data.room)].faceoff = true;
+            user1.inFaceoff = true;
+            user2.inFaceoff = true;
+            break;
+          }
+          users;
+        }
+      }
+
+      io.to(data.room).emit("post_faceoff", {
+        users: getUsersInRoom(data.room),
+        roomState: gameState[getRoomIndex(data.room)],
+      });
+      //prevent drawing card for next turn during a chain faceoff
+      if (canContinue) {
+        setTimeout(() => {
+          nextTurn(data.room);
+        }, MAX_WAITING);
+      }
+    } else {
+      io.to(data.room).emit("receive_message", {
+        room: data.room,
+        author: "",
+        message: `${data.username} yelled, "${data.input}!"`,
+      });
     }
+    io.to(data.id).emit("finish_validation");
   });
 
   socket.on("start_game", (data) => {

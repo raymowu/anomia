@@ -1,20 +1,17 @@
 const express = require("express");
 const app = express();
 const http = require("http");
-const { Server } = require("socket.io")({
-  cors: { origin: "*" },
-});
+const { Server } = require("socket.io");
 const cors = require("cors");
 
 app.use(cors());
 
 const server = http.createServer(app);
 
-const io = require("socket.io")({
+const io = new Server(server, {
   cors: {
-    origin: true,
+    origin: "https://enigmatic-spire-43575.herokuapp.com/",
     methods: ["GET", "POST"],
-    credentials: true,
   },
 });
 

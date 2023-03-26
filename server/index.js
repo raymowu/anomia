@@ -20,7 +20,7 @@ let gameState = [];
 
 const MAX_WAITING = 1000;
 const MAX_WAITING_AFTER_FACEOFF = 1000;
-const MAX_CATEGORIES = 6;
+const MAX_CATEGORIES = 5;
 const MAX_SYMBOLS = 8;
 const DECK_SIZE = 92;
 

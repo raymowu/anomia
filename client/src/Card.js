@@ -10,7 +10,18 @@ import square from "./assets/images/square.png";
 import star from "./assets/images/star.png";
 
 const Card = ({ user }) => {
-  const CATEGORIES = ["Movies", "TV Shows", "Pokemon", "Songs", "Car Brands", "Anime"];
+  const CATEGORIES = [
+    "Movies",
+    "TV Shows",
+    "Pokemon",
+    "Songs",
+    "Car Brands",
+    "Anime",
+    "Countries",
+    "Books",
+    "LOL champions",
+    "Video games",
+  ];
   const SYMBOLS = [circle, hashtag, bolt, dots, square, star, plus, pause];
   return (
     <div className="card">

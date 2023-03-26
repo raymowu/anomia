@@ -16,9 +16,12 @@
 }
 
 .card p {
+  position: relative;
+  height: 20px;
+  line-height: 14px;
   font-family: "Gadugi", "sans-serif", "Arial";
-  font-size: 15px;
-  white-space: nowrap;
+  font-size: 14px;
+  white-space: wrap;
 }
 
 .symbol {
@@ -28,5 +31,5 @@
 
 .category {
   margin-top: 6px;
-  margin-bottom: 6px;
+  margin-bottom: 4px;
 }

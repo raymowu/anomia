@@ -13,11 +13,18 @@ import faceoffsound4 from "./assets/audio/faceoffsound4.mp3";
 import EndScreen from "./EndScreen";
 
 const Anomia = ({ socket, username, room, users, setShowLobby, setShowGame }) => {
-  const MOVIESANDTV_DB = "https://www.omdbapi.com/?t=";
+  const MOVIESANDTV_DB = "https://www.omdbapi.com/?t="; // 1000 per day, need key
   const MOVIESANDTV_APIKEY = "&apikey=b0022818";
-  const POKEMON_DB = "https://pokeapi.co/api/v2/pokemon/?limit=9999";
-  const SONGS_DB = "https://deezerdevs-deezer.p.rapidapi.com/search?q=";
-  const CARS_DB = "https://car-api2.p.rapidapi.com/api/makes?sort=name&make=";
+  const POKEMON_DB = "https://pokeapi.co/api/v2/pokemon/?limit=9999"; // FREE TO PUBLIC
+  const SONGS_DB = "https://deezerdevs-deezer.p.rapidapi.com/search?q="; // no pricing, need key
+  const CARS_DB = "https://api.api-ninjas.com/v1/cars?make="; // 50,000 a month (api ninja)
+  const COUNTRIES_DB = "https://restcountries.com/v3.1/all?fields=name,flags"; // FREE TO PUBLIC
+  const BOOKS_DB = "https://www.googleapis.com/books/v1/volumes?q="; // FREE TO PUBLIC
+  const LEAGUE_DB =
+    "http://ddragon.leagueoflegends.com/cdn/13.6.1/data/en_US/champion.json"; // FREE TO PUBLIC
+
+  const VIDEOGAMES_DB =
+    "https://api.rawg.io/api/games?key=f2f0e308394b42c887a93d0c0276f6c2&search="; // 20,000 per month, need key
 
   const [state, setState] = useState({
     square: [],
@@ -61,12 +68,13 @@ const Anomia = ({ socket, username, room, users, setShowLobby, setShowGame }) =>
   }
 
   const sendFaceoffInput = async () => {
-    if (disableInput) return;
+    if (disableInput || currentFaceoffInput === "") return;
     setDisableInput(true);
     let validInput = false;
     let category = players
       .find((p) => p.inFaceoff && p.username !== username)
       .deck.at(-1).category;
+
     if (roomState.usedWords.includes(currentFaceoffInput.toLowerCase())) {
       playUsedWordSound();
     } else {
@@ -125,6 +133,7 @@ const Anomia = ({ socket, username, room, users, setShowLobby, setShowGame }) =>
             .then((res) => res.json())
             .then((json) => {
               if (
+                json.data.length !== 0 &&
                 json.data[0].title.toLowerCase() === currentFaceoffInput.toLowerCase()
               ) {
                 validInput = true;
@@ -135,18 +144,19 @@ const Anomia = ({ socket, username, room, users, setShowLobby, setShowGame }) =>
             });
           break;
         case 4:
-          await fetch(CARS_DB + currentFaceoffInput, {
+          await fetch(CARS_DB + currentFaceoffInput.replace(/\s+/g, "-"), {
             method: "GET",
             headers: {
-              "X-RapidAPI-Key": "e15a3578aemshfc8ff97c4a6af8ap17f164jsn84d74d0b4b62",
-              "X-RapidAPI-Host": "car-api2.p.rapidapi.com",
+              "X-Api-Key": "mfdXq8CkXP8k8dbb1O+JMg==LNXBEpjRU3XcU4I7",
             },
           })
             .then((res) => res.json())
             .then((json) => {
+              console.log(json);
               if (
-                json.data.length === 0 ||
-                json.data[0].name.toLowerCase() !== currentFaceoffInput.toLowerCase()
+                json.length === 0 ||
+                json[0].make.toLowerCase() !==
+                  currentFaceoffInput.replace(/\s+/g, "-").toLowerCase()
               ) {
                 playIncorrectSound();
                 validInput = false;
@@ -170,6 +180,79 @@ const Anomia = ({ socket, username, room, users, setShowLobby, setShowGame }) =>
                 validInput = false;
               }
             });
+          break;
+        case 6:
+          await fetch(`${COUNTRIES_DB}`)
+            .then((res) => res.json())
+            .then((json) => {
+              if (
+                json.find(
+                  (country) =>
+                    country.name.common.toLowerCase() ===
+                    currentFaceoffInput.toLowerCase()
+                )
+              ) {
+                validInput = true;
+              } else {
+                playIncorrectSound();
+                validInput = false;
+              }
+            });
+          break;
+        case 7:
+          await fetch(`${BOOKS_DB}` + currentFaceoffInput + '"')
+            .then((res) => res.json())
+            .then((json) => {
+              if (
+                json.totalItems !== 0 &&
+                json.items.find(
+                  (book) =>
+                    book.volumeInfo.title.toLowerCase() ===
+                    currentFaceoffInput.toLowerCase()
+                )
+              ) {
+                validInput = true;
+              } else {
+                playIncorrectSound();
+                validInput = false;
+              }
+            });
+          break;
+        case 8:
+          await fetch(`${LEAGUE_DB}`)
+            .then((res) => res.json())
+            .then((json) => {
+              // console.log(json);
+              if (
+                json.data.hasOwnProperty(
+                  `${
+                    currentFaceoffInput.toLowerCase().charAt(0).toUpperCase() +
+                    currentFaceoffInput.toLowerCase().slice(1)
+                  }`
+                )
+              ) {
+                validInput = true;
+              } else {
+                playIncorrectSound();
+                validInput = false;
+              }
+            });
+          break;
+        case 9:
+          await fetch(`${VIDEOGAMES_DB}` + currentFaceoffInput)
+            .then((res) => res.json())
+            .then((json) => {
+              if (
+                json.count !== 0 &&
+                json.results[0].name.toLowerCase() === currentFaceoffInput.toLowerCase()
+              ) {
+                validInput = true;
+              } else {
+                playIncorrectSound();
+                validInput = false;
+              }
+            });
+          break;
         default:
       }
     }
@@ -231,6 +314,7 @@ const Anomia = ({ socket, username, room, users, setShowLobby, setShowGame }) =>
     });
     socket.on("update_game", (data) => {
       if (data.roomState.faceoff) {
+        setDisableInput(false);
         playFaceoffSound();
       }
       playFlipCardSound();

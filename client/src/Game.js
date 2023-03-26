@@ -194,7 +194,6 @@ function Game({ socket, username, room, setShowLobby }) {
           <button onClick={sendMessage}>&#9658;</button>
         </div>
       </div>
-      }
     </div>
   );
 }

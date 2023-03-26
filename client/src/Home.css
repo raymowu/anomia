@@ -1,25 +1,38 @@
 .App {
   width: 100vw;
   height: 100vh;
-  background: #fff;
+  background: #0b132b;
   color: #212121;
   font-family: "Open Sans", sans-serif;
   display: grid;
   place-items: center;
 }
+
 body {
   margin: 0%;
   padding: 0%;
 }
 @import url("https://fonts.googleapis.com/css?family=Open+Sans:300,400,700");
 
+.home-anomia-logo {
+  font-size: 60px;
+  color: white;
+  text-shadow: -1px 0 orange, 0 1px orange, 1px 0 orange, 0 -1px orange;
+  text-decoration: none;
+  margin: -20px 0px 0px 0px;
+}
+
 .joinChatContainer {
+  background-color: #1c2541;
+  border-radius: 6px;
+  padding: 50px;
   display: flex;
   flex-direction: column;
   text-align: center;
 }
 
 .joinChatContainer h3 {
+  color: rgb(5, 3, 3);
   font-size: 2.5rem;
   margin-bottom: 1rem;
 }
@@ -27,25 +40,25 @@ body {
   width: 210px;
   height: 40px;
   margin: 7px;
-  border: 2px solid #43a047;
+  border: 2px solid black;
   border-radius: 5px;
   padding: 5px;
   font-size: 16px;
 }
 
 .joinChatContainer button {
-  width: 225px;
+  width: 220px;
   height: 50px;
-  margin: 7px;
+  margin: 9px;
   border: none;
   border-radius: 5px;
   padding: 5px;
   font-size: 16px;
-  background: #43a047;
-  color: #fff;
+  background: white;
+  color: black;
   cursor: pointer;
 }
 
 .joinChatContainer button:hover {
-  background: #2e7d32;
+  background-color: rgb(232, 234, 245);
 }

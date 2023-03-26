@@ -16,6 +16,7 @@
 }
 
 .card p {
+  margin-top: 10px;
   position: relative;
   height: 20px;
   line-height: 14px;
@@ -30,6 +31,6 @@
 }
 
 .category {
-  margin-top: 6px;
-  margin-bottom: 4px;
+  margin-top: 0px;
+  margin-bottom: 0px;
 }

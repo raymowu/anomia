@@ -256,7 +256,7 @@ io.on("connection", (socket) => {
       io.to(data.room).emit("receive_message", {
         room: data.room,
         author: "",
-        message: `${data.username} yelled, "${data.input}!"`,
+        message: `${data.username} guessed "${data.input}"`,
       });
     }
     io.to(data.id).emit("finish_validation");

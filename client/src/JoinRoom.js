@@ -47,9 +47,10 @@ function JoinRoom() {
     <div className="App">
       {!showLobby ? (
         <div className="joinChatContainer">
-          <h3>Enter Display Name</h3>
+          <p className="home-anomia-logo">ANOMIA</p>
+          <h3>Enter Name</h3>
           <input
-            placeholder="John..."
+            placeholder="Hu Tao..."
             onChange={(event) => {
               setUsername(event.target.value);
             }}

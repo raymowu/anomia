@@ -6,8 +6,8 @@
 
 .scoreboard .scoreboard-header {
   height: 45px;
-  border-radius: 6px;
-  background: #263238;
+  border-radius: 6px 6px 0px 0px;
+  background: #3a506b;
   position: relative;
   cursor: pointer;
 }

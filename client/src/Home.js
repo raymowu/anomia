@@ -7,6 +7,10 @@ function Home() {
   let navigate = useNavigate();
 
   const joinRoom = () => {
+    if (room.length > 8) {
+      alert("Room name is too long!");
+      return false;
+    }
     if (/[~`!#$%^&*+=\-[\]\\';,/{}|\\":<>?]/g.test(room)) {
       alert("No special characters allowed (!, $, /, etc.)");
       return false;
@@ -19,9 +23,10 @@ function Home() {
   return (
     <div className="App">
       <div className="joinChatContainer">
+        <p className="home-anomia-logo">ANOMIA</p>
         <h3>Join A Room</h3>
         <input
-          placeholder="Room Number..."
+          placeholder="hutao421..."
           onChange={(event) => {
             setRoom(event.target.value);
           }}

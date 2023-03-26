@@ -18,6 +18,7 @@ const Anomia = ({ socket, username, room, users, setShowLobby, setShowGame }) =>
   const POKEMON_DB = "https://pokeapi.co/api/v2/pokemon/?limit=9999";
   const SONGS_DB = "https://deezerdevs-deezer.p.rapidapi.com/search?q=";
   const CARS_DB = "https://car-api2.p.rapidapi.com/api/makes?sort=name&make=";
+  const COUNTRIES_DB = "https://wft-geo-db.p.rapidapi.com/v1/geo/countries?namePrefix=";
 
   const [state, setState] = useState({
     square: [],
@@ -156,6 +157,38 @@ const Anomia = ({ socket, username, room, users, setShowLobby, setShowGame }) =>
               }
             });
           break;
+        case 5:
+          await fetch(`${MOVIESANDTV_DB}` + currentFaceoffInput + `${MOVIESANDTV_APIKEY}`)
+            .then((res) => res.json())
+            .then((json) => {
+              if (
+                json.Response === "True" &&
+                json.Country === "Japan" &&
+                json.Genre.includes("Animation")
+              ) {
+                validInput = true;
+              } else {
+                playIncorrectSound();
+                validInput = false;
+              }
+            });
+        case 6:
+          await fetch(COUNTRIES_DB + currentFaceoffInput, {
+            method: "GET",
+            headers: {
+              "X-RapidAPI-Key": "e15a3578aemshfc8ff97c4a6af8ap17f164jsn84d74d0b4b62",
+              "X-RapidAPI-Host": "wft-geo-db.p.rapidapi.com",
+            },
+          })
+            .then((res) => res.json())
+            .then((json) => {
+              if (json.data[0].name.toLowerCase() === currentFaceoffInput.toLowerCase()) {
+                validInput = true;
+              } else {
+                playIncorrectSound();
+                validInput = false;
+              }
+            });
         default:
       }
     }

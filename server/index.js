@@ -22,7 +22,7 @@ const MAX_WAITING = 1000;
 const MAX_WAITING_AFTER_FACEOFF = 1000;
 const MAX_CATEGORIES = 10;
 const MAX_SYMBOLS = 8;
-const DECK_SIZE = 8;
+const DECK_SIZE = 92;
 
 const deleteGame = (room) => {
   gameState.splice(getRoomIndex(room), 1);

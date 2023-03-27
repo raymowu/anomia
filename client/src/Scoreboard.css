@@ -1,5 +1,5 @@
 .scoreboard {
-  margin-top: -10px;
+  margin-top: -20px;
   width: 250px;
   height: 500px;
 }
@@ -14,7 +14,7 @@
 
 .scoreboard .scoreboard-body {
   padding: 20px;
-  height: 200px;
+  height: 180px;
   border: 1px solid #263238;
   background: #fff;
 }

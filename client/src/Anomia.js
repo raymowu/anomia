@@ -11,17 +11,21 @@ import faceoffsound2 from "./assets/audio/faceoffsound2.mp3";
 import faceoffsound3 from "./assets/audio/faceoffsound3.mp3";
 import faceoffsound4 from "./assets/audio/faceoffsound4.mp3";
 import EndScreen from "./EndScreen";
+import Dictionary from "./Dictionary";
 
 const Anomia = ({ socket, username, room, users, setShowLobby, setShowGame }) => {
   const MOVIESANDTV_DB = "https://www.omdbapi.com/?t="; // 1000 per day, need key
   const MOVIESANDTV_APIKEY = "&apikey=b0022818";
   const POKEMON_DB = "https://pokeapi.co/api/v2/pokemon/?limit=9999"; // FREE TO PUBLIC
+  const POKEMON_DB_IMGS =
+    "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/"; // FREE TO PUBLIC
   const SONGS_DB = "https://deezerdevs-deezer.p.rapidapi.com/search?q="; // no pricing, need key
   const CARS_DB = "https://api.api-ninjas.com/v1/cars?make="; // 50,000 a month (api ninja)
   const COUNTRIES_DB = "https://restcountries.com/v3.1/all?fields=name,flags"; // FREE TO PUBLIC
   const BOOKS_DB = "https://www.googleapis.com/books/v1/volumes?q="; // FREE TO PUBLIC
   const LEAGUE_DB =
     "https://ddragon.leagueoflegends.com/cdn/13.6.1/data/en_US/champion.json"; // FREE TO PUBLIC
+  const LEAGUE_DB_IMGS = "https://ddragon.leagueoflegends.com/cdn/img/champion/loading/";
 
   const VIDEOGAMES_DB =
     "https://api.rawg.io/api/games?key=f2f0e308394b42c887a93d0c0276f6c2&search="; // 20,000 per month, need key
@@ -45,6 +49,9 @@ const Anomia = ({ socket, username, room, users, setShowLobby, setShowGame }) =>
   const [disableInput, setDisableInput] = useState(false);
   const [showEndScreen, setShowEndScreen] = useState(false);
   const [num, setNum] = useState(users.length); //Number of Square to be generate
+  const [dictionaryUser, setDictionaryUser] = useState("");
+  const [dictionaryCategory, setDictionaryCategory] = useState("");
+  const [dictionaryImg, setDictionaryImg] = useState("");
 
   function playIncorrectSound() {
     let audio = new Audio(incorrect);
@@ -79,10 +86,12 @@ const Anomia = ({ socket, username, room, users, setShowLobby, setShowGame }) =>
     if (disableInput || currentFaceoffInput === "") return;
     setDisableInput(true);
     let validInput = false;
-    let category = players
-      .find((p) => p.inFaceoff && p.username !== username)
-      .deck.at(-1).category;
-
+    let dictCat = "";
+    let dictImg = "";
+    // let category = players
+    //   .find((p) => p.inFaceoff && p.username !== username)
+    //   .deck.at(-1).category;
+    let category = 9;
     if (roomState.usedWords.includes(currentFaceoffInput.toLowerCase())) {
       playUsedWordSound();
     } else {
@@ -93,6 +102,8 @@ const Anomia = ({ socket, username, room, users, setShowLobby, setShowGame }) =>
             .then((json) => {
               if (json.Response === "True" && json.Type === "movie") {
                 validInput = true;
+                dictCat = `${json.Title} - ${json.Year}`;
+                dictImg = json.Poster;
               } else {
                 playIncorrectSound();
                 validInput = false;
@@ -105,6 +116,8 @@ const Anomia = ({ socket, username, room, users, setShowLobby, setShowGame }) =>
             .then((res) => res.json())
             .then((json) => {
               if (json.Response === "True" && json.Type === "series") {
+                dictCat = `${json.Title} - ${json.Year}`;
+                dictImg = json.Poster;
                 validInput = true;
               } else {
                 playIncorrectSound();
@@ -117,12 +130,16 @@ const Anomia = ({ socket, username, room, users, setShowLobby, setShowGame }) =>
           await fetch(`${POKEMON_DB}`)
             .then((res) => res.json())
             .then((json) => {
-              if (
-                json.results.find(
-                  (pokemon) =>
-                    pokemon.name.toLowerCase() === currentFaceoffInput.toLowerCase()
-                )
-              ) {
+              const pokemonName = json.results.find(
+                (pokemon) =>
+                  pokemon.name.toLowerCase() === currentFaceoffInput.toLowerCase()
+              );
+              if (pokemonName) {
+                dictCat = pokemonName.name;
+                dictImg =
+                  POKEMON_DB_IMGS +
+                  pokemonName.url.substring(34, pokemonName.url.length - 1) +
+                  ".png";
                 validInput = true;
               } else {
                 playIncorrectSound();
@@ -144,6 +161,8 @@ const Anomia = ({ socket, username, room, users, setShowLobby, setShowGame }) =>
                 json.data.length !== 0 &&
                 json.data[0].title.toLowerCase() === currentFaceoffInput.toLowerCase()
               ) {
+                dictCat = `${json.data[0].title} - ${json.data[0].artist.name}`;
+                dictImg = json.data[0].album.cover;
                 validInput = true;
               } else {
                 playIncorrectSound();
@@ -169,6 +188,8 @@ const Anomia = ({ socket, username, room, users, setShowLobby, setShowGame }) =>
                 playIncorrectSound();
                 validInput = false;
               } else {
+                dictCat = `${json[0].make}`;
+                dictImg = "";
                 validInput = true;
               }
             });
@@ -182,6 +203,8 @@ const Anomia = ({ socket, username, room, users, setShowLobby, setShowGame }) =>
                 json.Country === "Japan" &&
                 json.Genre.includes("Animation")
               ) {
+                dictCat = `${json.Title} - ${json.Year}`;
+                dictImg = json.Poster;
                 validInput = true;
               } else {
                 playIncorrectSound();
@@ -193,13 +216,13 @@ const Anomia = ({ socket, username, room, users, setShowLobby, setShowGame }) =>
           await fetch(`${COUNTRIES_DB}`)
             .then((res) => res.json())
             .then((json) => {
-              if (
-                json.find(
-                  (country) =>
-                    country.name.common.toLowerCase() ===
-                    currentFaceoffInput.toLowerCase()
-                )
-              ) {
+              const c = json.find(
+                (country) =>
+                  country.name.common.toLowerCase() === currentFaceoffInput.toLowerCase()
+              );
+              if (c) {
+                dictCat = c.name.common;
+                dictImg = c.flags.png;
                 validInput = true;
               } else {
                 playIncorrectSound();
@@ -211,6 +234,7 @@ const Anomia = ({ socket, username, room, users, setShowLobby, setShowGame }) =>
           await fetch(`${BOOKS_DB}` + currentFaceoffInput + '"')
             .then((res) => res.json())
             .then((json) => {
+              console.log(json);
               if (
                 json.totalItems !== 0 &&
                 json.items.find(
@@ -219,6 +243,13 @@ const Anomia = ({ socket, username, room, users, setShowLobby, setShowGame }) =>
                     currentFaceoffInput.toLowerCase()
                 )
               ) {
+                const b = json.items.find(
+                  (book) =>
+                    book.volumeInfo.title.toLowerCase() ===
+                    currentFaceoffInput.toLowerCase()
+                );
+                dictCat = `${b.volumeInfo.title} - ${b.volumeInfo.authors[0]}`;
+                dictImg = b.volumeInfo.imageLinks.thumbnail;
                 validInput = true;
               } else {
                 playIncorrectSound();
@@ -233,12 +264,20 @@ const Anomia = ({ socket, username, room, users, setShowLobby, setShowGame }) =>
               // console.log(json);
               if (
                 json.data.hasOwnProperty(
-                  `${
-                    currentFaceoffInput.toLowerCase().charAt(0).toUpperCase() +
-                    currentFaceoffInput.toLowerCase().slice(1)
-                  }`
+                  `${currentFaceoffInput.replace(/\w\S*/g, function (txt) {
+                    return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+                  })}`
                 )
               ) {
+                dictCat = `${currentFaceoffInput.replace(/\w\S*/g, function (txt) {
+                  return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+                })}`;
+                dictImg =
+                  LEAGUE_DB_IMGS +
+                  `${currentFaceoffInput.replace(/\w\S*/g, function (txt) {
+                    return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+                  })}` +
+                  "_0.jpg";
                 validInput = true;
               } else {
                 playIncorrectSound();
@@ -254,6 +293,8 @@ const Anomia = ({ socket, username, room, users, setShowLobby, setShowGame }) =>
                 json.count !== 0 &&
                 json.results[0].name.toLowerCase() === currentFaceoffInput.toLowerCase()
               ) {
+                dictCat = `${json.results[0].name}`;
+                dictImg = `${json.results[0].background_image}`;
                 validInput = true;
               } else {
                 playIncorrectSound();
@@ -271,8 +312,10 @@ const Anomia = ({ socket, username, room, users, setShowLobby, setShowGame }) =>
       username: username,
       validInput: validInput,
       input: currentFaceoffInput,
+      dictCat: dictCat,
+      dictImg: dictImg,
     };
-    await socket.emit("faceoff-input", inputData);
+    await socket.emit("faceoff_input", inputData);
     setCurrentFaceoffInput("");
   };
 
@@ -311,6 +354,9 @@ const Anomia = ({ socket, username, room, users, setShowLobby, setShowGame }) =>
       buildCircle();
     });
     socket.on("started_game", (data) => {
+      setDictionaryCategory("");
+      setDictionaryImg("");
+      setDictionaryUser("");
       setShowEndScreen(false);
     });
     socket.on("update_game", (data) => {
@@ -333,6 +379,9 @@ const Anomia = ({ socket, username, room, users, setShowLobby, setShowGame }) =>
       }
       setPlayers(data.users);
       setRoomState(data.roomState);
+      setDictionaryCategory(data.dictCat);
+      setDictionaryImg(data.dictImg);
+      setDictionaryUser(data.dictUser);
     });
     socket.on("finish_validation", () => {
       setDisableInput(false);
@@ -356,7 +405,11 @@ const Anomia = ({ socket, username, room, users, setShowLobby, setShowGame }) =>
 
       <>
         <Scoreboard users={players} />
-
+        <Dictionary
+          user={dictionaryUser}
+          dictionaryCategory={dictionaryCategory}
+          dictionaryImg={dictionaryImg}
+        />
         <div className="circle">
           <div className="circle-hold">
             {state.square.map(function (value, index) {

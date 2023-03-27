@@ -22,7 +22,7 @@ const MAX_WAITING = 1000;
 const MAX_WAITING_AFTER_FACEOFF = 1000;
 const MAX_CATEGORIES = 10;
 const MAX_SYMBOLS = 8;
-const DECK_SIZE = 92;
+const DECK_SIZE = 8;
 
 const deleteGame = (room) => {
   gameState.splice(getRoomIndex(room), 1);
@@ -191,7 +191,7 @@ io.on("connection", (socket) => {
     callback();
   });
 
-  socket.on("faceoff-input", (data) => {
+  socket.on("faceoff_input", (data) => {
     if (data.validInput === true) {
       io.to(data.room).emit("receive_message", {
         room: data.room,
@@ -245,6 +245,9 @@ io.on("connection", (socket) => {
       io.to(data.room).emit("post_faceoff", {
         users: getUsersInRoom(data.room),
         roomState: gameState[getRoomIndex(data.room)],
+        dictUser: data.username,
+        dictCat: data.dictCat,
+        dictImg: data.dictImg,
       });
       //prevent drawing card for next turn during a chain faceoff
       if (canContinue) {

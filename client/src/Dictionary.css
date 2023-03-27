@@ -1,0 +1,39 @@
+.dictionary {
+  position: absolute;
+  margin-top: -220px;
+  width: 250px;
+  height: 200px;
+}
+
+.dictionary .dictionary-header {
+  height: 45px;
+  border-radius: 6px 6px 0px 0px;
+  background: #3a506b;
+  position: relative;
+  cursor: pointer;
+}
+
+.dictionary .dictionary-body {
+  height: 260px;
+  border: 1px solid #263238;
+  background: #fff;
+}
+.dictionary .dictionary-header p {
+  display: block;
+  padding: 0 1em 0 2em;
+  color: #fff;
+  font-weight: 700;
+  line-height: 45px;
+}
+
+.dictionary .dictionary-body .dictionary-thing {
+  margin: 0px;
+  font-weight: bold;
+  line-height: 24px;
+}
+
+.dictionary .dictionary-body .dictionary-img {
+  margin-top: 16px;
+  width: 100px;
+  max-height: 180px;
+}

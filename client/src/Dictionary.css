@@ -14,6 +14,7 @@
 }
 
 .dictionary .dictionary-body {
+  text-align: center;
   height: 260px;
   border: 1px solid #263238;
   background: #fff;
@@ -33,7 +34,7 @@
 }
 
 .dictionary .dictionary-body .dictionary-img {
-  margin-top: 16px;
-  width: 100px;
+  margin-top: 4px;
+  max-width: 200px;
   max-height: 180px;
 }

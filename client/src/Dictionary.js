@@ -11,7 +11,12 @@ const Dictionary = ({ user, dictionaryCategory, dictionaryImg }) => {
       <div className="dictionary-body">
         <p className="dictionary-thing">{user ? `${user} won with ` : ``}</p>
         <p className="dictionary-thing">{dictionaryCategory}</p>
-        <img className="dictionary-img" alt="" src={dictionaryImg}></img>
+        <img
+          className="dictionary-img"
+          alt=""
+          src={dictionaryImg}
+          onerror="https://i.imgur.com/5ZZKdnt.png"
+        ></img>
       </div>
     </div>
   );

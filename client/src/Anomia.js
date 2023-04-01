@@ -84,6 +84,7 @@ const Anomia = ({ socket, username, room, users, setShowLobby, setShowGame }) =>
 
   const sendFaceoffInput = async () => {
     if (disableInput || currentFaceoffInput === "") return;
+    if (!roomState.faceoff) return;
     setDisableInput(true);
     let validInput = false;
     let dictCat = "";

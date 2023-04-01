@@ -84,6 +84,7 @@ const nextTurn = (room) => {
     !gameState[getRoomIndex(room)].faceoff &&
     gameState[getRoomIndex(room)].cardsLeft > 0
   ) {
+    console.log(gameState[getRoomIndex(room)]);
     gameState[getRoomIndex(room)]._turn =
       gameState[getRoomIndex(room)].currentTurn++ %
       gameState[getRoomIndex(room)].numPlayers;
@@ -286,6 +287,29 @@ io.on("connection", (socket) => {
     const user = removeUser(socket.id);
     if (user && gameState[getRoomIndex(user.room)]) {
       gameState[getRoomIndex(user.room)].numPlayers--;
+      // skip faceoff, move on to next turn
+      let user1;
+      for (let i = 0; i < gameState[getRoomIndex(user.room)].numPlayers; i++) {
+        user1 = getUsersInRoom(user.room)[i];
+        if (
+          user1.username === gameState[getRoomIndex(user.room)].faceoffPeople[0] ||
+          user1.username === gameState[getRoomIndex(user.room)].faceoffPeople[1]
+        ) {
+          user1.inFaceoff = false;
+        }
+      }
+      gameState[getRoomIndex(user.room)].faceoffPeople = [];
+      gameState[getRoomIndex(user.room)].faceoff = false;
+      io.to(user.room).emit("post_faceoff", {
+        users: getUsersInRoom(user.room),
+        roomState: gameState[getRoomIndex(user.room)],
+        dictUser: "No one",
+        dictCat: "Opponent left the game!",
+        dictImg: "",
+      });
+      setTimeout(() => {
+        nextTurn(user.room);
+      }, MAX_WAITING);
       if (gameState[getRoomIndex(user.room)].numPlayers === 0) deleteGame(user.room);
       socket.to(user.room).emit("receive_message", {
         room: user.room,
@@ -304,6 +328,3 @@ io.on("connection", (socket) => {
 server.listen(process.env.PORT || 3001, () => {
   console.log("SERVER IS RUNNING");
 });
-// server.listen(3001, () => {
-//   console.log("SERVER IS RUNNING");
-// });

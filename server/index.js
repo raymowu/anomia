@@ -193,7 +193,6 @@ io.on("connection", (socket) => {
   });
 
   socket.on("faceoff_input", (data) => {
-    socket.off("faceoff_input");
     if (data.validInput === true) {
       // proceed game when theres a winner
       gameState[getRoomIndex(data.room)].usedWords.push(data.input.toLowerCase());

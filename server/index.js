@@ -22,7 +22,7 @@ const MAX_WAITING = 1000;
 const MAX_WAITING_AFTER_FACEOFF = 1000;
 const MAX_CATEGORIES = 10;
 const MAX_SYMBOLS = 8;
-const DECK_SIZE = 92;
+const DEF_DECK_SIZE = 92;
 
 const deleteGame = (room) => {
   gameState.splice(getRoomIndex(room), 1);
@@ -37,7 +37,7 @@ const restartGame = (room) => {
     currentTurn: 0,
     faceoff: false,
     faceoffPeople: [],
-    cardsLeft: DECK_SIZE,
+    cardsLeft: DEF_DECK_SIZE,
     usedWords: [],
   };
   for (let i = 0; i < getUsersInRoom(room).length; i++) {
@@ -153,7 +153,7 @@ io.on("connection", (socket) => {
       currentTurn: 0,
       faceoff: false,
       faceoffPeople: [],
-      cardsLeft: DECK_SIZE,
+      cardsLeft: DEF_DECK_SIZE,
       usedWords: [],
     };
 
@@ -268,6 +268,7 @@ io.on("connection", (socket) => {
 
   socket.on("start_game", (data) => {
     gameState[getRoomIndex(data.room)].inProgress = true;
+    gameState[getRoomIndex(data.room)].cardsLeft = data.deckSize;
     setTimeout(() => {
       nextTurn(data.room);
     }, MAX_WAITING);

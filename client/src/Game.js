@@ -13,6 +13,7 @@ function Game({ socket, username, room, setShowLobby }) {
   const [users, setUsers] = useState([]);
   const [showGame, setShowGame] = useState(false);
   const [isHovering, setIsHovering] = useState(false);
+  const [deckSize, setDeckSize] = useState(92);
 
   let navigate = useNavigate();
 
@@ -22,14 +23,23 @@ function Game({ socket, username, room, setShowLobby }) {
     window.location.reload();
   };
 
+  function isNumeric(value) {
+    return /^-?\d+$/.test(value);
+  }
+
   const startGame = async () => {
     if (users.length === 1 || users.length > 6) {
       alert("Must have 2-6 players to start!");
       return false;
     }
+    if (!isNumeric(deckSize) || deckSize > 9999 || deckSize < 10) {
+      alert("Please input deck size of 10-9999");
+      return false;
+    }
     const userData = {
       room: room,
       user: username,
+      deckSize: deckSize,
     };
     await socket.emit("start_game", userData);
     setShowGame(true);
@@ -84,10 +94,9 @@ function Game({ socket, username, room, setShowLobby }) {
   const handleMouseOut = () => {
     setIsHovering(false);
   };
-
+  console.log(users);
   return (
     <>
-      <p className="anomia-logo">ANOMIA</p>
       <div className="window">
         {!showGame ? (
           <div className="game-window">
@@ -120,22 +129,51 @@ function Game({ socket, username, room, setShowLobby }) {
               </p>
             </div>
 
-            <div className="player-display">
-              <div className="player-display-header">
-                <p>Players</p>
+            <div className="left-container">
+              <div className="player-display">
+                <div className="player-display-header">
+                  <p>Players</p>
+                </div>
+                <div className="player-display-list">
+                  {users.map((p) => {
+                    return <p key={p.id}>{p.username}</p>;
+                  })}
+                </div>
               </div>
-              <div className="player-display-list">
-                {users.map((p) => {
-                  return <p key={p.id}>{p.username}</p>;
-                })}
-              </div>
+              {users.length === 0 || username === users[0].username ? (
+                <>
+                  <div className="cards-setting">
+                    <p>Game Settings </p>Deck size:{" "}
+                    <input
+                      type="text"
+                      value={deckSize}
+                      onChange={(event) => {
+                        setDeckSize(event.target.value);
+                      }}
+                    ></input>
+                  </div>
+                  <button className="lobby-button" onClick={leaveGame}>
+                    Leave
+                  </button>
+                  <button className="lobby-button" onClick={startGame}>
+                    Start game
+                  </button>
+                </>
+              ) : (
+                <>
+                  <div className="cards-setting">
+                    <p>Waiting for {users[0].username} to start the game...</p>
+                    <input style={{ visibility: "hidden" }}></input>
+                  </div>
+                  <button className="lobby-button" style={{ visibility: "hidden" }}>
+                    Leave
+                  </button>
+                  <button className="lobby-button" style={{ visibility: "hidden" }}>
+                    Start game
+                  </button>
+                </>
+              )}
             </div>
-            <button className="lobby-button" onClick={leaveGame}>
-              Leave
-            </button>
-            <button className="lobby-button" onClick={startGame}>
-              Start game
-            </button>
             <div className="rules-container">
               <div className="rules-header">
                 <h2>Anomia</h2>

@@ -21,7 +21,7 @@
 .anomia-logo {
   font-size: 60px;
   margin-right: 1150px;
-  margin-top: -80px;
+
   color: white;
   text-shadow: -1px 0 orange, 0 1px orange, 1px 0 orange, 0 -1px orange;
 }
@@ -31,7 +31,6 @@
   background-color: #1c2541;
   border-radius: 6px;
   padding: 50px;
-  margin-top: -300px;
 }
 .game-window {
   min-width: 1000px;
@@ -63,7 +62,6 @@
 .lobby-button {
   font-family: "Gadugi";
   background-color: rgb(255, 255, 255);
-
   border-radius: 6px;
   opacity: 1;
   width: 116px;
@@ -76,12 +74,31 @@
   background-color: rgb(232, 234, 245);
 }
 
+.cards-setting {
+  font-weight: bold;
+  color: white;
+  transform: translateX(-400px);
+  margin-bottom: 10px;
+}
+
+.cards-setting input {
+  height: 20px;
+  border-radius: 6px;
+}
+
+.cards-setting-filler {
+  height: 20px;
+  border: 3px solid white;
+  transform: translateX(-400px);
+  margin-bottom: 10px;
+}
+
 .rules-container {
   overflow-y: scroll;
   padding: 0px 20px;
   text-align: left;
   background-color: white;
-  margin-top: -240px;
+  margin-top: -326px;
   width: 560px;
   height: 463px;
   border: 1px solid black;

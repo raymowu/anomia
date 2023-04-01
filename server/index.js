@@ -193,7 +193,7 @@ io.on("connection", (socket) => {
   });
 
   socket.on("faceoff_input", (data) => {
-    if (data.validInput === true) {
+    if (data.validInput === true && gameState[getRoomIndex(data.room)].faceoff) {
       io.to(data.room).emit("receive_message", {
         room: data.room,
         author: "",

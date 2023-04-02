@@ -20,7 +20,7 @@ let gameState = [];
 
 const MAX_WAITING = 1000;
 const MAX_WAITING_AFTER_FACEOFF = 1000;
-const MAX_CATEGORIES = 10;
+const MAX_CATEGORIES = 11;
 const MAX_SYMBOLS = 8;
 const DEF_DECK_SIZE = 92;
 
@@ -195,6 +195,7 @@ io.on("connection", (socket) => {
   socket.on("faceoff_input", (data) => {
     if (!gameState[getRoomIndex(data.room)].faceoff) return;
     if (data.validInput === true) {
+      gameState[getRoomIndex(data.room)].faceoff = false;
       // proceed game when theres a winner
       gameState[getRoomIndex(data.room)].usedWords.push(data.input.toLowerCase());
       getUser(data.id).points++;
@@ -212,7 +213,6 @@ io.on("connection", (socket) => {
         }
       }
       gameState[getRoomIndex(data.room)].faceoffPeople = [];
-      gameState[getRoomIndex(data.room)].faceoff = false;
 
       // check for chain face offs and set statuses accordingly
       let canContinue = true;

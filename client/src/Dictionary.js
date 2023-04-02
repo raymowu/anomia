@@ -2,7 +2,6 @@ import React from "react";
 import "./Dictionary.css";
 
 const Dictionary = ({ user, dictionaryCategory, dictionaryImg }) => {
-  console.log(user, dictionaryCategory, dictionaryImg);
   return (
     <div className="dictionary">
       <div className="dictionary-header">
@@ -15,7 +14,7 @@ const Dictionary = ({ user, dictionaryCategory, dictionaryImg }) => {
           className="dictionary-img"
           alt=""
           src={dictionaryImg}
-          onerror="https://i.imgur.com/5ZZKdnt.png"
+          onError="https://i.imgur.com/5ZZKdnt.png"
         ></img>
       </div>
     </div>

@@ -33,10 +33,10 @@
   padding: 50px;
 }
 .game-window {
-  min-width: 1000px;
+  /* min-width: 1000px; */
   width: 100%;
-  min-height: 600px;
-  height: 50%;
+  /* min-height: 600px; */
+  height: 100%;
 }
 
 .lobby-header {
@@ -48,6 +48,7 @@
   width: 600px;
   height: 100px;
   word-wrap: break-word;
+  text-align: center;
 }
 .lobby-header h1 {
   margin-top: -5px;
@@ -67,7 +68,7 @@
   width: 116px;
   height: 40px;
   margin: 9px 10px;
-  transform: translateX(-400px);
+  /* transform: translateX(-400px); */
 }
 
 .lobby-button:hover {
@@ -77,7 +78,7 @@
 .cards-setting {
   font-weight: bold;
   color: white;
-  transform: translateX(-400px);
+  /* transform: translateX(-400px); */
   margin-bottom: 10px;
 }
 
@@ -120,6 +121,7 @@
   height: 300px;
   border-radius: 8px;
   background-color: white;
+  text-align: center;
 }
 
 .player-display .player-display-header {

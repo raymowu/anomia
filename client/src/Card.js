@@ -21,6 +21,7 @@ const Card = ({ user }) => {
     "Books",
     "LOL champions",
     "Video games",
+    "Famous People",
   ];
   const SYMBOLS = [circle, hashtag, bolt, dots, square, star, plus, pause];
   return (

@@ -1,7 +1,6 @@
 .App {
   width: 100vw;
   height: 100vh;
-  background: #0b132b;
   color: #212121;
   font-family: "Open Sans", sans-serif;
   display: grid;
@@ -9,6 +8,7 @@
 }
 
 body {
+  background: #0b132b;
   margin: 0%;
   padding: 0%;
 }

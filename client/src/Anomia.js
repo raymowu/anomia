@@ -29,6 +29,7 @@ const Anomia = ({ socket, username, room, users, setShowLobby, setShowGame }) =>
 
   const VIDEOGAMES_DB =
     "https://api.rawg.io/api/games?key=f2f0e308394b42c887a93d0c0276f6c2&search="; // 20,000 per month, need key
+  const HISTORICAL_FIGURES_DB = "https://api.api-ninjas.com/v1/historicalfigures?name="; // 50,000 a month (api ninja)
 
   const [state, setState] = useState({
     square: [],
@@ -92,7 +93,7 @@ const Anomia = ({ socket, username, room, users, setShowLobby, setShowGame }) =>
     let category = players
       .find((p) => p.inFaceoff && p.username !== username)
       .deck.at(-1).category;
-    // let category = 9;
+    // let category = 10;
     if (roomState.usedWords.includes(currentFaceoffInput.toLowerCase())) {
       playUsedWordSound();
     } else {
@@ -180,7 +181,6 @@ const Anomia = ({ socket, username, room, users, setShowLobby, setShowGame }) =>
           })
             .then((res) => res.json())
             .then((json) => {
-              console.log(json);
               if (
                 json.length === 0 ||
                 json[0].make.toLowerCase() !==
@@ -235,7 +235,6 @@ const Anomia = ({ socket, username, room, users, setShowLobby, setShowGame }) =>
           await fetch(`${BOOKS_DB}` + currentFaceoffInput + '"')
             .then((res) => res.json())
             .then((json) => {
-              console.log(json);
               if (
                 json.totalItems !== 0 &&
                 json.items.find(
@@ -262,7 +261,6 @@ const Anomia = ({ socket, username, room, users, setShowLobby, setShowGame }) =>
           await fetch(`${LEAGUE_DB}`)
             .then((res) => res.json())
             .then((json) => {
-              // console.log(json);
               if (
                 json.data.hasOwnProperty(
                   `${currentFaceoffInput.replace(/\w\S*/g, function (txt) {
@@ -296,6 +294,35 @@ const Anomia = ({ socket, username, room, users, setShowLobby, setShowGame }) =>
               ) {
                 dictCat = `${json.results[0].name}`;
                 dictImg = `${json.results[0].background_image}`;
+                validInput = true;
+              } else {
+                playIncorrectSound();
+                validInput = false;
+              }
+            });
+          break;
+        case 10:
+          await fetch(HISTORICAL_FIGURES_DB + currentFaceoffInput, {
+            method: "GET",
+            headers: {
+              "X-Api-Key": "mfdXq8CkXP8k8dbb1O+JMg==LNXBEpjRU3XcU4I7",
+            },
+          })
+            .then((res) => res.json())
+            .then((json) => {
+              if (
+                json.length !== 0 &&
+                json.find(
+                  (figure) =>
+                    figure.name.toLowerCase() === currentFaceoffInput.toLowerCase()
+                )
+              ) {
+                const figure = json.find(
+                  (figure) =>
+                    figure.name.toLowerCase() === currentFaceoffInput.toLowerCase()
+                );
+                dictCat = `${figure.name} - ${figure.title}`;
+                dictImg = "";
                 validInput = true;
               } else {
                 playIncorrectSound();

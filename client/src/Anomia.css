@@ -4,7 +4,7 @@
   width: 480px;
   height: 480px;
   border-radius: 50%;
-  margin: -500px 0px 40px 400px;
+  margin: -500px 60px 40px 360px;
   position: relative;
   /* top: 200px; left: 200px; for example purposes only */
 }
@@ -35,7 +35,7 @@
 .faceoff-input {
   width: 400px;
   height: 40px;
-  margin-left: 240px;
+  margin-left: 410px;
   padding: 12px 20px;
   display: inline-block;
   border: 1px solid #ccc;

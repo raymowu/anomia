@@ -93,7 +93,7 @@ const Anomia = ({ socket, username, room, users, setShowLobby, setShowGame }) =>
     let category = players
       .find((p) => p.inFaceoff && p.username !== username)
       .deck.at(-1).category;
-    // let category = 10;
+    // let category = 8;
     if (roomState.usedWords.includes(currentFaceoffInput.toLowerCase())) {
       playUsedWordSound();
     } else {
@@ -261,22 +261,13 @@ const Anomia = ({ socket, username, room, users, setShowLobby, setShowGame }) =>
           await fetch(`${LEAGUE_DB}`)
             .then((res) => res.json())
             .then((json) => {
-              if (
-                json.data.hasOwnProperty(
-                  `${currentFaceoffInput.replace(/\w\S*/g, function (txt) {
-                    return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
-                  })}`
-                )
-              ) {
-                dictCat = `${currentFaceoffInput.replace(/\w\S*/g, function (txt) {
-                  return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
-                })}`;
-                dictImg =
-                  LEAGUE_DB_IMGS +
-                  `${currentFaceoffInput.replace(/\w\S*/g, function (txt) {
-                    return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
-                  })}` +
-                  "_0.jpg";
+              const input = `${currentFaceoffInput.replace(/\w\S*/g, function (txt) {
+                return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+              })}`;
+              console.log(input.replace(/\s/g, ""));
+              if (json.data.hasOwnProperty(input.replace(/\s/g, ""))) {
+                dictCat = input;
+                dictImg = LEAGUE_DB_IMGS + input.replace(/\s/g, "") + "_0.jpg";
                 validInput = true;
               } else {
                 playIncorrectSound();

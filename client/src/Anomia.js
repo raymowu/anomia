@@ -90,10 +90,10 @@ const Anomia = ({ socket, username, room, users, setShowLobby, setShowGame }) =>
     let validInput = false;
     let dictCat = "";
     let dictImg = "";
-    // let category = players
-    //   .find((p) => p.inFaceoff && p.username !== username)
-    //   .deck.at(-1).category;
-    let category = 3;
+    let category = players
+      .find((p) => p.inFaceoff && p.username !== username)
+      .deck.at(-1).category;
+    // let category = 3;
     if (roomState.usedWords.includes(currentFaceoffInput.toLowerCase())) {
       playUsedWordSound();
     } else {

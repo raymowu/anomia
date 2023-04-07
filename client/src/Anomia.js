@@ -90,10 +90,10 @@ const Anomia = ({ socket, username, room, users, setShowLobby, setShowGame }) =>
     let validInput = false;
     let dictCat = "";
     let dictImg = "";
-    let category = players
-      .find((p) => p.inFaceoff && p.username !== username)
-      .deck.at(-1).category;
-    // let category = 8;
+    // let category = players
+    //   .find((p) => p.inFaceoff && p.username !== username)
+    //   .deck.at(-1).category;
+    let category = 3;
     if (roomState.usedWords.includes(currentFaceoffInput.toLowerCase())) {
       playUsedWordSound();
     } else {
@@ -159,12 +159,12 @@ const Anomia = ({ socket, username, room, users, setShowLobby, setShowGame }) =>
           })
             .then((res) => res.json())
             .then((json) => {
-              if (
-                json.data.length !== 0 &&
-                json.data[0].title.toLowerCase() === currentFaceoffInput.toLowerCase()
-              ) {
-                dictCat = `${json.data[0].title} - ${json.data[0].artist.name}`;
-                dictImg = json.data[0].album.cover;
+              const songName = json.data.find(
+                (s) => s.title.toLowerCase() === currentFaceoffInput.toLowerCase()
+              );
+              if (json.data.length !== 0 && songName) {
+                dictCat = `${songName.title} - ${songName.artist.name}`;
+                dictImg = songName.album.cover;
                 validInput = true;
               } else {
                 playIncorrectSound();

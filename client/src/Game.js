@@ -94,7 +94,7 @@ function Game({ socket, username, room, setShowLobby }) {
   const handleMouseOut = () => {
     setIsHovering(false);
   };
-  console.log(users);
+
   return (
     <>
       <div className="window">

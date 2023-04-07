@@ -67,7 +67,7 @@
   opacity: 1;
   width: 116px;
   height: 40px;
-  margin: 9px 10px;
+  margin: 10px 20px 10px 0px;
   /* transform: translateX(-400px); */
 }
 
@@ -83,6 +83,7 @@
 }
 
 .cards-setting input {
+  width: 162px;
   height: 20px;
   border-radius: 6px;
 }

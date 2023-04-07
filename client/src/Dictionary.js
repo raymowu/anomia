@@ -14,7 +14,10 @@ const Dictionary = ({ user, dictionaryCategory, dictionaryImg }) => {
           className="dictionary-img"
           alt=""
           src={dictionaryImg}
-          onError="https://i.imgur.com/5ZZKdnt.png"
+          onError={({ currentTarget }) => {
+            currentTarget.onerror = null;
+            currentTarget.src = "https://i.imgur.com/5ZZKdnt.png";
+          }}
         ></img>
       </div>
     </div>

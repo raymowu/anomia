@@ -84,7 +84,7 @@ const nextTurn = (room) => {
     !gameState[getRoomIndex(room)].faceoff &&
     gameState[getRoomIndex(room)].cardsLeft > 0
   ) {
-    console.log(gameState[getRoomIndex(room)]);
+    // console.log(gameState[getRoomIndex(room)]);
     gameState[getRoomIndex(room)]._turn =
       gameState[getRoomIndex(room)].currentTurn++ %
       gameState[getRoomIndex(room)].numPlayers;

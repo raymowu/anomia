@@ -61,12 +61,7 @@ function JoinRoom() {
           <button onClick={joinRoom}>Join Room</button>
         </div>
       ) : (
-        <Game
-          socket={socket}
-          username={username}
-          room={room}
-          setShowLobby={setShowLobby}
-        />
+        <Game socket={socket} username={username} room={room} setShowLobby={setShowLobby} />
       )}
     </div>
   );

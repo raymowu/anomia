@@ -4,7 +4,7 @@
   width: 480px;
   height: 480px;
   border-radius: 50%;
-  margin: -500px 60px 40px 360px;
+  margin: -500px 60px 0px 360px;
   position: relative;
   /* top: 200px; left: 200px; for example purposes only */
 }
@@ -46,4 +46,17 @@
 
 .faceoff-input:focus {
   outline-width: 0;
+}
+
+.invalid-message {
+  color: red;
+  width: 400px;
+  margin-left: 410px;
+  margin-bottom: 0px;
+  line-height: 22px;
+}
+
+.invalid-message-hide {
+  height: 6px;
+  visibility: hidden;
 }

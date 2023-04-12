@@ -48,9 +48,7 @@ const restartGame = (room) => {
 };
 
 const addUser = ({ id, username, room }) => {
-  const existingUser = users.find(
-    (user) => user.room === room && user.username === username
-  );
+  const existingUser = users.find((user) => user.room === room && user.username === username);
   if (existingUser) {
     return { error: "Username is taken" };
   } else if (gameState[getRoomIndex(room)].inProgress) {
@@ -86,8 +84,7 @@ const nextTurn = (room) => {
   ) {
     // console.log(gameState[getRoomIndex(room)]);
     gameState[getRoomIndex(room)]._turn =
-      gameState[getRoomIndex(room)].currentTurn++ %
-      gameState[getRoomIndex(room)].numPlayers;
+      gameState[getRoomIndex(room)].currentTurn++ % gameState[getRoomIndex(room)].numPlayers;
     let category = getRandomInt(MAX_CATEGORIES);
     let symbol = getRandomInt(MAX_SYMBOLS);
     let card = { category, symbol };
@@ -118,10 +115,7 @@ const nextTurn = (room) => {
       roomState: gameState[getRoomIndex(room)],
       users: getUsersInRoom(room),
     });
-    console.log(
-      `next turn triggered in room ${room}: `,
-      gameState[getRoomIndex(room)]._turn
-    );
+    console.log(`next turn triggered in room ${room}: `, gameState[getRoomIndex(room)]._turn);
     triggerTimeout(room);
   }
 };
@@ -226,10 +220,7 @@ io.on("connection", (socket) => {
             user1.deck.at(-1).symbol === user2.deck.at(-1).symbol
           ) {
             canContinue = false;
-            gameState[getRoomIndex(data.room)].faceoffPeople = [
-              user1.username,
-              user2.username,
-            ];
+            gameState[getRoomIndex(data.room)].faceoffPeople = [user1.username, user2.username];
             gameState[getRoomIndex(data.room)].faceoff = true;
             user1.inFaceoff = true;
             user2.inFaceoff = true;
@@ -330,3 +321,7 @@ io.on("connection", (socket) => {
 server.listen(process.env.PORT || 3001, () => {
   console.log("SERVER IS RUNNING");
 });
+
+// server.listen(3001, () => {
+//   console.log("SERVER IS RUNNING");
+// });

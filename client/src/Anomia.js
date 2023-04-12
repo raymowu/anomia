@@ -23,8 +23,7 @@ const Anomia = ({ socket, username, room, users, setShowLobby, setShowGame }) =>
   const CARS_DB = "https://api.api-ninjas.com/v1/cars?make="; // 50,000 a month (api ninja)
   const COUNTRIES_DB = "https://restcountries.com/v3.1/all?fields=name,flags"; // FREE TO PUBLIC
   const BOOKS_DB = "https://www.googleapis.com/books/v1/volumes?q="; // FREE TO PUBLIC
-  const LEAGUE_DB =
-    "https://ddragon.leagueoflegends.com/cdn/13.6.1/data/en_US/champion.json"; // FREE TO PUBLIC
+  const LEAGUE_DB = "https://ddragon.leagueoflegends.com/cdn/13.6.1/data/en_US/champion.json"; // FREE TO PUBLIC
   const LEAGUE_DB_IMGS = "https://ddragon.leagueoflegends.com/cdn/img/champion/loading/";
 
   const VIDEOGAMES_DB =
@@ -53,6 +52,8 @@ const Anomia = ({ socket, username, room, users, setShowLobby, setShowGame }) =>
   const [dictionaryUser, setDictionaryUser] = useState("");
   const [dictionaryCategory, setDictionaryCategory] = useState("");
   const [dictionaryImg, setDictionaryImg] = useState("");
+  const [showInvalidWordMsg, setShowInvalidWordMsg] = useState(false);
+  const [invalidWordMsg, setInvalidWordMsg] = useState("");
 
   function playIncorrectSound() {
     let audio = new Audio(incorrect);
@@ -90,12 +91,12 @@ const Anomia = ({ socket, username, room, users, setShowLobby, setShowGame }) =>
     let validInput = false;
     let dictCat = "";
     let dictImg = "";
-    let category = players
-      .find((p) => p.inFaceoff && p.username !== username)
-      .deck.at(-1).category;
+    let category = players.find((p) => p.inFaceoff && p.username !== username).deck.at(-1).category;
     // let category = 3;
     if (roomState.usedWords.includes(currentFaceoffInput.toLowerCase())) {
       playUsedWordSound();
+      setShowInvalidWordMsg(true);
+      setInvalidWordMsg("Duplicate word!");
     } else {
       switch (category) {
         case 0:
@@ -133,8 +134,7 @@ const Anomia = ({ socket, username, room, users, setShowLobby, setShowGame }) =>
             .then((res) => res.json())
             .then((json) => {
               const pokemonName = json.results.find(
-                (pokemon) =>
-                  pokemon.name.toLowerCase() === currentFaceoffInput.toLowerCase()
+                (pokemon) => pokemon.name.toLowerCase() === currentFaceoffInput.toLowerCase()
               );
               if (pokemonName) {
                 dictCat = pokemonName.name;
@@ -218,8 +218,7 @@ const Anomia = ({ socket, username, room, users, setShowLobby, setShowGame }) =>
             .then((res) => res.json())
             .then((json) => {
               const c = json.find(
-                (country) =>
-                  country.name.common.toLowerCase() === currentFaceoffInput.toLowerCase()
+                (country) => country.name.common.toLowerCase() === currentFaceoffInput.toLowerCase()
               );
               if (c) {
                 dictCat = c.name.common;
@@ -239,14 +238,12 @@ const Anomia = ({ socket, username, room, users, setShowLobby, setShowGame }) =>
                 json.totalItems !== 0 &&
                 json.items.find(
                   (book) =>
-                    book.volumeInfo.title.toLowerCase() ===
-                    currentFaceoffInput.toLowerCase()
+                    book.volumeInfo.title.toLowerCase() === currentFaceoffInput.toLowerCase()
                 )
               ) {
                 const b = json.items.find(
                   (book) =>
-                    book.volumeInfo.title.toLowerCase() ===
-                    currentFaceoffInput.toLowerCase()
+                    book.volumeInfo.title.toLowerCase() === currentFaceoffInput.toLowerCase()
                 );
                 dictCat = `${b.volumeInfo.title} - ${b.volumeInfo.authors[0]}`;
                 dictImg = b.volumeInfo.imageLinks.thumbnail;
@@ -304,13 +301,11 @@ const Anomia = ({ socket, username, room, users, setShowLobby, setShowGame }) =>
               if (
                 json.length !== 0 &&
                 json.find(
-                  (figure) =>
-                    figure.name.toLowerCase() === currentFaceoffInput.toLowerCase()
+                  (figure) => figure.name.toLowerCase() === currentFaceoffInput.toLowerCase()
                 )
               ) {
                 const figure = json.find(
-                  (figure) =>
-                    figure.name.toLowerCase() === currentFaceoffInput.toLowerCase()
+                  (figure) => figure.name.toLowerCase() === currentFaceoffInput.toLowerCase()
                 );
                 dictCat = `${figure.name} - ${figure.title}`;
                 dictImg = "";
@@ -323,6 +318,11 @@ const Anomia = ({ socket, username, room, users, setShowLobby, setShowGame }) =>
           break;
         default:
       }
+    }
+
+    if (!roomState.usedWords.includes(currentFaceoffInput.toLowerCase()) && !validInput) {
+      setShowInvalidWordMsg(true);
+      setInvalidWordMsg("Invalid word!");
     }
 
     const inputData = {
@@ -401,6 +401,8 @@ const Anomia = ({ socket, username, room, users, setShowLobby, setShowGame }) =>
       setDictionaryCategory(data.dictCat);
       setDictionaryImg(data.dictImg);
       setDictionaryUser(data.dictUser);
+      setShowInvalidWordMsg(false);
+      setInvalidWordMsg("");
     });
     socket.on("finish_validation", () => {
       setDisableInput(false);
@@ -434,31 +436,31 @@ const Anomia = ({ socket, username, room, users, setShowLobby, setShowGame }) =>
             {state.square.map(function (value, index) {
               if (!players[index]) return false;
               return (
-                <Square
-                  css={value}
-                  num={index + 1}
-                  user={players[index]}
-                  key={room + index}
-                />
+                <Square css={value} num={index + 1} user={players[index]} key={room + index} />
               );
             })}
           </div>
         </div>
         {roomState.faceoffPeople.includes(username) && !showEndScreen ? (
-          <input
-            ref={(input) => input && input.focus()}
-            className="faceoff-input"
-            value={currentFaceoffInput}
-            type="text"
-            onChange={(event) => {
-              setCurrentFaceoffInput(event.target.value);
-            }}
-            onKeyDown={(event) => {
-              event.key === "Enter" && sendFaceoffInput();
-            }}
-            disabled={disableInput}
-            placeholder={disableInput ? "Validating answer..." : "Faceoff!"}
-          ></input>
+          <div>
+            <p className={showInvalidWordMsg ? "invalid-message" : "invalid-message-hide"}>
+              {invalidWordMsg}
+            </p>
+            <input
+              ref={(input) => input && input.focus()}
+              className="faceoff-input"
+              value={currentFaceoffInput}
+              type="text"
+              onChange={(event) => {
+                setCurrentFaceoffInput(event.target.value);
+              }}
+              onKeyDown={(event) => {
+                event.key === "Enter" && sendFaceoffInput();
+              }}
+              disabled={disableInput}
+              placeholder={disableInput ? "Validating answer..." : "Faceoff!"}
+            ></input>
+          </div>
         ) : (
           <></>
         )}

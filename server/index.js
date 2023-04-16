@@ -281,28 +281,30 @@ io.on("connection", (socket) => {
     if (user && gameState[getRoomIndex(user.room)]) {
       gameState[getRoomIndex(user.room)].numPlayers--;
       // skip faceoff, move on to next turn
-      let user1;
-      for (let i = 0; i < gameState[getRoomIndex(user.room)].numPlayers; i++) {
-        user1 = getUsersInRoom(user.room)[i];
-        if (
-          user1.username === gameState[getRoomIndex(user.room)].faceoffPeople[0] ||
-          user1.username === gameState[getRoomIndex(user.room)].faceoffPeople[1]
-        ) {
-          user1.inFaceoff = false;
+      if (gameState[getRoomIndex(user.room)].faceoff) {
+        let user1;
+        for (let i = 0; i < gameState[getRoomIndex(user.room)].numPlayers; i++) {
+          user1 = getUsersInRoom(user.room)[i];
+          if (
+            user1.username === gameState[getRoomIndex(user.room)].faceoffPeople[0] ||
+            user1.username === gameState[getRoomIndex(user.room)].faceoffPeople[1]
+          ) {
+            user1.inFaceoff = false;
+          }
         }
+        gameState[getRoomIndex(user.room)].faceoffPeople = [];
+        gameState[getRoomIndex(user.room)].faceoff = false;
+        io.to(user.room).emit("post_faceoff", {
+          users: getUsersInRoom(user.room),
+          roomState: gameState[getRoomIndex(user.room)],
+          dictUser: "No one",
+          dictCat: "Opponent left the game!",
+          dictImg: "",
+        });
+        setTimeout(() => {
+          nextTurn(user.room);
+        }, MAX_WAITING);
       }
-      gameState[getRoomIndex(user.room)].faceoffPeople = [];
-      gameState[getRoomIndex(user.room)].faceoff = false;
-      io.to(user.room).emit("post_faceoff", {
-        users: getUsersInRoom(user.room),
-        roomState: gameState[getRoomIndex(user.room)],
-        dictUser: "No one",
-        dictCat: "Opponent left the game!",
-        dictImg: "",
-      });
-      setTimeout(() => {
-        nextTurn(user.room);
-      }, MAX_WAITING);
       if (gameState[getRoomIndex(user.room)].numPlayers === 0) deleteGame(user.room);
       socket.to(user.room).emit("receive_message", {
         room: user.room,

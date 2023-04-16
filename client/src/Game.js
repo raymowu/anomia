@@ -14,6 +14,7 @@ function Game({ socket, username, room, setShowLobby }) {
   const [showGame, setShowGame] = useState(false);
   const [isHovering, setIsHovering] = useState(false);
   const [deckSize, setDeckSize] = useState(92);
+  // const [volume, setVolume] = useState(0.15);
 
   let navigate = useNavigate();
 
@@ -63,13 +64,13 @@ function Game({ socket, username, room, setShowLobby }) {
 
   function playChatSound() {
     let audio = new Audio(chatsound);
-    audio.volume = 0.1;
+    audio.volume = 0.05;
     audio.play();
   }
 
   function playStartGameSound() {
     let audio = new Audio(startgamesound);
-    audio.volume = 0.1;
+    audio.volume = 0.05;
     audio.play();
   }
 
@@ -100,6 +101,17 @@ function Game({ socket, username, room, setShowLobby }) {
       <div className="window">
         {!showGame ? (
           <div className="game-window">
+            {/* <input
+              className="sound-setting"
+              type="range"
+              min={0}
+              max={1}
+              step={0.02}
+              value={volume}
+              onChange={(event) => {
+                setVolume(event.target.valueAsNumber);
+              }}
+            /> */}
             <div className="lobby-header">
               <h1>Room {room}</h1>
               <p>
@@ -119,9 +131,7 @@ function Game({ socket, username, room, setShowLobby }) {
                 <button
                   className="copy-lobby-link-button"
                   onClick={() => {
-                    navigator.clipboard.writeText(
-                      `https://hutaofunbox.netlify.app/${room}`
-                    );
+                    navigator.clipboard.writeText(`https://hutaofunbox.netlify.app/${room}`);
                   }}
                 >
                   Copy
@@ -178,42 +188,35 @@ function Game({ socket, username, room, setShowLobby }) {
               <div className="rules-header">
                 <h2>Anomia</h2>
                 <p>
-                  Original card game designed by Andrew Innes. This online version
-                  developed by Raymond Wu.
+                  Original card game designed by Andrew Innes. This online version developed by
+                  Raymond Wu.
                 </p>
                 <h2>Object of the Game</h2>
                 <p>To win the most cards by facing-off with other players.</p>
                 <h2>Play Piles</h2>
                 <p>
-                  One at a time, players continue drawing cards from either pile, in
-                  clockwise order, until the symbols on two players' cards match. If you
-                  draw a card and there is no match, the next player draws.
+                  One at a time, players continue drawing cards from a pile, in clockwise order,
+                  until the symbols on two players' cards match. If you draw a card and there is no
+                  match, the next player draws.
                 </p>
                 <h2>Face-offs & Winning Piles</h2>
                 <p>
-                  When the symbols on two players' cards match, they must Face-Off with
-                  one another. This is the heart of the game. A Face-Off consists of
-                  giving a correct example of the person, place, or thing on your
-                  opponent's card, before they can do the same for your card. The player
-                  who finishes typinga correct answer when prompted first wins the
-                  Face-Off. The winner takes the loser's top card and scores a point. The
+                  When the symbols on two players' cards match, they must Face-Off with one another.
+                  This is the heart of the game. A Face-Off consists of giving a correct example of
+                  the person, place, or thing on your opponent's card, before they can do the same
+                  for your card. The player who finishes typing a correct answer when prompted first
+                  wins the Face-Off. The winner takes the loser's top card and scores a point. The
                   winner's top card stays where it is.
                 </p>
                 <h2>Cascades</h2>
                 <p>
-                  The loser's Play Pile may now reveal a new top card. Watch out! A new
-                  Face-Off may now occur between the loser and any other player! Please
-                  note, play is structured so that there can be only one Face-Off at a
-                  time, though there may be many in quick succession. This is called a
-                  Cascade.
+                  The loser's Play Pile may now reveal a new top card. Watch out! A new Face-Off may
+                  now occur between the loser and any other player! Please note, play is structured
+                  so that there can be only one Face-Off at a time, though there may be many in
+                  quick succession. This is called a Cascade.
                 </p>
                 <h2>After a Face-Off/Cascade</h2>
-                <p>
-                  Drawing continues with the next player in the clockwise drawing
-                  sequence. You may find it helpful to pass a small token around to
-                  indicate whose turn it is. A salt shaker or coin will do nicely.
-                </p>
-                .
+                <p>Drawing continues with the next player in the clockwise drawing sequence.</p>
               </div>
             </div>
           </div>
@@ -238,11 +241,7 @@ function Game({ socket, username, room, setShowLobby }) {
                   <div className="message" key={room + index}>
                     <div>
                       <div className="message-content">
-                        <p
-                          className={
-                            messageContent.author.length === 0 ? "admin-message" : ""
-                          }
-                        >
+                        <p className={messageContent.author.length === 0 ? "admin-message" : ""}>
                           <span className="message-meta">{messageContent.author}</span>{" "}
                           {messageContent.message}
                         </p>

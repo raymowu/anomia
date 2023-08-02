@@ -338,6 +338,13 @@ const Anomia = ({ socket, username, room, users, setShowLobby, setShowGame }) =>
     setCurrentFaceoffInput("");
   };
 
+  const forceSkip = async () => {
+    const data = {
+      room: room,
+    };
+    await socket.emit("force_skip", data);
+  };
+
   useEffect(() => {
     const buildCircle = () => {
       const type = 1;
@@ -461,6 +468,18 @@ const Anomia = ({ socket, username, room, users, setShowLobby, setShowGame }) =>
               placeholder={disableInput ? "Validating answer..." : "Faceoff!"}
             ></input>
           </div>
+        ) : (
+          <></>
+        )}
+        {roomState.faceoff && (users.length === 0 || username === users[0].username) ? (
+          <button
+            className="force-skip-button"
+            onClick={() => {
+              forceSkip();
+            }}
+          >
+            Force skip
+          </button>
         ) : (
           <></>
         )}

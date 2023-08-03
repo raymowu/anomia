@@ -317,12 +317,6 @@ io.on("connection", (socket) => {
       setTimeout(() => {
         nextTurn(data.room);
       }, MAX_WAITING);
-    } else {
-      io.to(data.room).emit("receive_message", {
-        room: data.room,
-        author: "",
-        message: `${data.username} guessed "${data.input}"`,
-      });
     }
     io.to(data.id).emit("finish_validation");
   });

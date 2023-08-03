@@ -447,6 +447,20 @@ const Anomia = ({ socket, username, room, users, setShowLobby, setShowGame }) =>
               );
             })}
           </div>
+          {roomState.faceoff && username === users[0].username ? (
+            <div>
+              <button
+                className="force-skip-button"
+                onClick={() => {
+                  forceSkip();
+                }}
+              >
+                Force skip
+              </button>
+            </div>
+          ) : (
+            <></>
+          )}
         </div>
         {roomState.faceoffPeople.includes(username) && !showEndScreen ? (
           <div>
@@ -468,18 +482,6 @@ const Anomia = ({ socket, username, room, users, setShowLobby, setShowGame }) =>
               placeholder={disableInput ? "Validating answer..." : "Faceoff!"}
             ></input>
           </div>
-        ) : (
-          <></>
-        )}
-        {roomState.faceoff && (users.length === 0 || username === users[0].username) ? (
-          <button
-            className="force-skip-button"
-            onClick={() => {
-              forceSkip();
-            }}
-          >
-            Force skip
-          </button>
         ) : (
           <></>
         )}

@@ -86,9 +86,6 @@ const nextTurn = (room) => {
     gameState[getRoomIndex(room)]._turn =
       gameState[getRoomIndex(room)].currentTurn++ % gameState[getRoomIndex(room)].numPlayers;
     let category = getRandomInt(MAX_CATEGORIES);
-    while (category === 8 || category === 9) {
-      category = getRandomInt(MAX_CATEGORIES);
-    }
     let symbol = getRandomInt(MAX_SYMBOLS);
     let card = { category, symbol };
     getUsersInRoom(room)[gameState[getRoomIndex(room)]._turn].deck.push(card);
